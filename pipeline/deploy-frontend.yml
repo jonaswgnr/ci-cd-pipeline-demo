@@ -9,7 +9,7 @@
       ignore_errors: true
 
     - name: Copy archive
-      shell: "cp {{ frontendPackage }} {{ webroot }}"
+      shell: "cp ../{{ frontendPackage }} {{ webroot }}"
 
     - name: Unpack archive
       shell: "cd {{ webroot }} && tar -xvzf {{ frontendPackage }} "

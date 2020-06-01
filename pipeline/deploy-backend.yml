@@ -3,7 +3,7 @@
   tasks:
 
     - name: Get running Containers
-      shell: "docker ps -aqf \"ancestor=b95\""
+      shell: "docker ps -aqf \"name=backend\""
       register: running_container
 
     - name: Stop running Contianer
