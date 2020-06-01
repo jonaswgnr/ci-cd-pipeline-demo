@@ -1,4 +1,4 @@
-git #!groovy
+#!groovy
 
 def dockerexec = "/usr/local/bin/docker"
 def dockerImageName = "backend"
