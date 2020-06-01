@@ -1,0 +1,16 @@
+- hosts: backendhost
+  connection: local
+  tasks:
+
+    - name: Get running Containers
+      shell: "docker ps -aqf \"ancestor=b95\""
+      register: running_container
+
+    - name: Stop running Contianer
+      shell: "docker rm -f {{ item }}"
+      with_items:
+        - "{{ running_container.stdout }}"
+      when: running_container.stdout != ""
+
+    - name: Run new Container
+      shell: "docker run -d -p 8181:8080 --name backend backend"
