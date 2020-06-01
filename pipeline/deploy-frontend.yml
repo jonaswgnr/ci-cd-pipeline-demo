@@ -12,4 +12,4 @@
       shell: "cp ../{{ frontendPackage }} {{ webroot }}"
 
     - name: Unpack archive
-      shell: "cd {{ webroot }} && tar -xvzf {{ frontendPackage }} "
+      shell: "cd {{ webroot }} && tar -xvzf {{ frontendPackage }} && mv frontend/* ."
