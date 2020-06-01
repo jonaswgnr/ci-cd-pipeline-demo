@@ -77,7 +77,7 @@ pipeline {
                                 script {
                                     dir('frontend') {
                                         sh 'ng build'
-                                        sh 'cd dist && tar -czf ' + frontendPackage + ' frontend'
+                                        sh 'cd dist && tar -czf ' + frontendPackage + ' frontend/*'
                                         sh 'cp dist/' + frontendPackage + " .."
                                     }
                                 }
