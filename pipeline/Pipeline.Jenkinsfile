@@ -4,7 +4,6 @@ def dockerexec = "/usr/local/bin/docker"
 def dockerImageName = "backend"
 def webserverRoot = "/usr/local/var/www"
 def frontendPackage = "frontend.tar.gz"
-def deploy = false
 
 pipeline {
     agent any
@@ -79,6 +78,7 @@ pipeline {
                                     dir('frontend') {
                                         sh 'ng build'
                                         sh 'cd dist && tar -czf ' + frontendPackage + ' frontend'
+                                        sh 'cp dist/' + frontendPackage + " .."
                                     }
                                 }
                             }
@@ -91,8 +91,7 @@ pipeline {
             steps {
                 timeout(60) {
                     input message: 'Continue?',
-                            parameters: [booleanParam(defaultValue: false, description: '', name: 'deploy')],
-                            submitterParameter: 'deploy'
+                            parameters: [booleanParam(defaultValue: false, description: '', name: 'deploy')]
                 }
             }
         }
