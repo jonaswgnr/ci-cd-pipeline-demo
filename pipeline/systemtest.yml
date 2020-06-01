@@ -1,0 +1,30 @@
+- hosts: backendhost
+  connection: local
+  vars:
+    backendurl: "http://localhost:8181/demo/tested"
+  tasks:
+    - name: Test Backendurl
+      uri:
+        url: "{{ backendurl }}"
+        method: GET
+        return_content: yes
+      register: backendcheck
+      until: backendcheck.status == 200
+      retries: 10
+      delay: 5
+
+- hosts: backendhost
+  connection: local
+  vars:
+    frontendurl: "http://localhost"
+  tasks:
+    - name: Test Frontend
+      uri:
+        url: "{{ frontendurl }}"
+        method: GET
+        return_content: yes
+      register: backendcheck
+      until: backendcheck.status == 200
+      retries: 10
+      delay: 5
+

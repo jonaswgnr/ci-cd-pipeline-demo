@@ -129,5 +129,16 @@ pipeline {
                 }
             }
         }
+        stage("Systemtests") {
+            steps {
+                script {
+                    if (deploy) {
+                        dir("pipeline") {
+                            sh 'ansible-playbook -i hosts deploy-backend.yml'
+                        }
+                    }
+                }
+            }
+        }
     }
 }
