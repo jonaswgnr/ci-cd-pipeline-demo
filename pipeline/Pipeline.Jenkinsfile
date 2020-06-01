@@ -3,7 +3,7 @@
 def dockerexec = "/usr/local/bin/docker"
 def dockerImageName = "backend"
 def webserverRoot = "/usr/local/var/www"
-def frontendPackage = "archiv.tar.gz"
+def frontendPackage = "frontend.tar.gz"
 def deploy = false
 
 pipeline {
@@ -96,29 +96,36 @@ pipeline {
                 }
             }
         }
-        stage('Deploy Frontend') {
-            steps {
-                script {
-                    if (deploy) {
-                        dir(webserverRoot) {
-                            sh 'rm -R * 2>/dev/null || true'
-                        }
-                        dir('frontend/dist') {
-                            sh 'cp ' + frontendPackage + ' ' + webserverRoot
-                        }
-                        dir(webserverRoot) {
-                            sh 'tar -xvzf ' + frontendPackage
-                            sh 'mv frontend/* .'
+        stage("Deploy") {
+            parallel {
+                stage("backend") {
+                    stages {
+                        stage('Deploy Frontend') {
+                            steps {
+                                script {
+                                    if (deploy) {
+                                        dir("pipeline") {
+                                            sh 'ansible-playbook -i hosts deploy-frontend.yml'
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
-            }
-        }
-        stage('Deploy Backend') {
-            steps {
-                script {
-                    if (deploy) {
-                        sh 'docker run -d --rm -p8181:8080 ' + dockerImageName
+                stage("frontend") {
+                    stages {
+                        stage('Deploy Backend') {
+                            steps {
+                                script {
+                                    if (deploy) {
+                                        dir("pipeline") {
+                                            sh 'ansible-playbook -i hosts deploy-backend.yml'
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

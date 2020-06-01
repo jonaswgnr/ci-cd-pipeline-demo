@@ -1,0 +1,15 @@
+- hosts: frontendhost
+  connection: local
+  vars:
+    webroot: "/usr/local/var/www"
+    frontendPackage: "frontend.tar.gz"
+  tasks:
+    - name: Delete old Frontend
+      shell: "rm -rf {{ webroot }}/* 2>/dev/null"
+      ignore_errors: true
+
+    - name: Copy archive
+      shell: "cp {{ frontendPackage }} {{ webroot }}"
+
+    - name: Unpack archive
+      shell: "cd {{ webroot }} && tar -xvzf {{ frontendPackage }} "
